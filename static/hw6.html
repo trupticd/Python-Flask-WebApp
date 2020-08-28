@@ -1,0 +1,707 @@
+<html>
+<head>
+  <link rel="stylesheet" href="hw6.css" type="text/css">
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+  <script type="text/javascript">
+
+  window.onload = startApp;
+  function startApp(){
+    console.log("inside window onload")
+
+    addOptions();
+    wordCloud();
+    button_coloring();
+    getTopHeadlines();
+    getCNNHeadlines();
+    getFoxHeadlines();
+    defaultDate();
+
+  }
+  function button_coloring(){
+    if(document.getElementById("mynews").style.display=="block"){
+      var button1 = document.getElementsByClassName("google_news_button");
+      button1[0].style.background="DimGrey";
+      button1[0].style.color="white";
+      var button2 = document.getElementsByClassName("search_button");
+      button2[0].style.background="#f2f2f2";
+      button2[0].style.color="black";
+    }
+    if(document.getElementById("myform").style.display=="block"){
+      var button1 = document.getElementsByClassName("search_button");
+      button1[0].style.background="DimGrey";
+      button1[0].style.color="white";
+      var button2 = document.getElementsByClassName("google_news_button");
+      button2[0].style.background="#f2f2f2";
+      button2[0].style.color="black";
+    }
+  }
+  //Slideshow of news
+  slideIndex = 0;
+  function showSlides() {
+  // slideIndex = 0;
+  slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 3000); // Change image every 2 seconds
+  }
+  //to hide and show two contents
+    function displayForm(){
+
+      var form = document.getElementById("myform");
+      var news = document.getElementById("mynews");
+      if (form.style.display == "none") {
+          form.style.display = "block";
+      }
+      news.style.display = "none";
+
+    }
+    function displayNews(){
+
+      var news = document.getElementById("mynews");
+      var form = document.getElementById("myform");
+      if (news.style.display == "none") {
+          news.style.display = "block";
+      }
+      form.style.display = "none";
+    }
+    //getting basic html page
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function(){
+        if(xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+          // console.log("this was returned");
+          // console.log(xmlhttp.responseText);
+        }
+        else{
+          console.log("file not found");
+        }
+      }
+      xmlhttp.open("GET","/index",true);
+      xmlhttp.send();
+
+      //get top headlines for slideshow
+      function getTopHeadlines(){
+        var html="";
+        var xmlhttp1 = new XMLHttpRequest();
+        xmlhttp1.onreadystatechange = function(){
+          if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+            // console.log("this was returned");
+            console.log(xmlhttp1.responseText);
+            top_headlines = JSON.parse(xmlhttp1.responseText);
+            console.log("these are top headlines");
+            console.log(top_headlines);
+            for(i=0;i<top_headlines.length;i++){
+              if(i==5){
+                break;
+              }
+              headline = top_headlines[i];
+              html+="<a href='"+headline.URL+"'style='color:white;' target='_blank'><div class='mySlides'>";
+              html+="<img class='slideImage' src='"+headline.Image+"' style='width:100%;'>";
+              html+="<div class='text'><font size='2px'><b>"+headline.Title+"</b></font><br><br><font size='2px'>"+headline.Description+"</font></div></div></a>";
+              // html+="<div class='text'>"+headline.Description+"</div></div>";
+            }
+            document.getElementById("slideshow-container").innerHTML = html;
+            showSlides();
+          }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp1.open("GET","/top_headlines", true);
+        xmlhttp1.send();
+      }
+      //CNN cards
+      function getCNNHeadlines(){
+        var html="";
+        console.log("getcnn called")
+        var xmlhttp1 = new XMLHttpRequest();
+        xmlhttp1.onreadystatechange = function(){
+          if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+
+            console.log(xmlhttp1.responseText);
+            cnn_headlines = JSON.parse(xmlhttp1.responseText);
+            console.log("these are cnn top headlines");
+            console.log(cnn_headlines);
+
+            for(i=0;i<cnn_headlines.length;i++){
+              // console.log("inside fro");
+              if(i==4){
+                break;
+              }
+              cnncard = cnn_headlines[i];
+              html+="<a href='"+cnncard.URL+"' style='color:black;' target='_blank'><div class='card'>";
+              html+="<img class='card-image' src='"+cnncard.Image+"' style='width:100%'>";
+              html+="<div class='container'>";
+              html+="<h6 class='title'><b>"+cnncard.Title+"</b></h6>";
+              html+="<p class='desc'><font size='2px'>"+cnncard.Description+"</font></p>";
+              html+="</div></div></a>";
+            }
+            document.getElementById("card-holdercnn").innerHTML = html;
+          }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp1.open("GET","/cnn_headlines", true);
+        xmlhttp1.send();
+      }
+      //fox cards
+      function getFoxHeadlines(){
+        var html="";
+        var xmlhttp1 = new XMLHttpRequest();
+        xmlhttp1.onreadystatechange = function(){
+          if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+            // console.log("this was returned");
+            console.log(xmlhttp1.responseText);
+            fox_headlines = JSON.parse(xmlhttp1.responseText);
+            console.log("these are top fox headlines");
+            console.log(fox_headlines);
+
+            for(i=0;i<fox_headlines.length;i++){
+              // console.log("inside fro");
+              if(i==4){
+                break;
+              }
+              foxcard = fox_headlines[i];
+              html+="<a href='"+foxcard.URL+"' style='color:black;' target='_blank'><div class='card'>";
+              html+="<img class='card-image' src='"+foxcard.Image+"' style='width:100%'>";
+              html+="<div class='container'>";
+              html+="<h6 class='title'><b>"+foxcard.Title+"</b></h6>";
+              html+="<p class='desc'><font size='2px'>"+foxcard.Description+"</font></p>";
+              html+="</div></div></a>";
+            }
+            document.getElementById("card-holderfox").innerHTML = html;
+          }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp1.open("GET","/fox_headlines", true);
+        xmlhttp1.send();
+      }
+      function addOptions(){
+        var curr;
+        html="";
+        param = document.getElementById("category_list");
+        Category = param.options[param.selectedIndex].value;
+        if(Category!="all"){
+          var xmlhttp1 = new XMLHttpRequest();
+          xmlhttp1.onreadystatechange = function(){
+            if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+              console.log("this was returned");
+              console.log(xmlhttp1.responseText);
+              source = JSON.parse(xmlhttp1.responseText);
+              html+="<option selected='selected'>all</option>";
+              for(i=0;i<source.length;i++){
+                if(i==10){
+                  break;
+                }
+                curr=source[i];
+                html+="<option>"+curr.name+"</option>";
+              }
+              document.getElementById("selection_menu").innerHTML = html;
+            }
+            else{
+              console.log("file not found");
+            }
+          }
+          xmlhttp1.open("GET","/sources?category="+Category , true);
+          xmlhttp1.send();
+        }
+        else{
+          var xmlhttp1 = new XMLHttpRequest();
+          xmlhttp1.onreadystatechange = function(){
+            if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+              console.log("this was returned");
+              console.log(xmlhttp1.responseText);
+              source = JSON.parse(xmlhttp1.responseText);
+              html+="<option selected='selected'>all</option>";
+              for(i=0;i<source.length;i++){
+                if(i==10){
+                  break;
+                }
+                curr=source[i];
+                html+="<option>"+curr.name+"</option>";
+              }
+              document.getElementById("selection_menu").innerHTML = html;
+            }
+            else{
+              console.log("file not found");
+            }
+          }
+          xmlhttp1.open("GET","/getAllSources" , true);
+          xmlhttp1.send();
+
+        }
+
+
+      }
+      function getNews(){
+        console.log(form1.keyword.value);
+        var keyword = form1.keyword.value;
+        console.log(form1.from_date.value);
+        var from_date = form1.from_date.value;
+        console.log(form1.to_date.value);
+        var to_date = form1.from_date.value;
+        param = document.getElementById("selection_menu");
+        source_name = param.options[param.selectedIndex].value;
+        console.log(source_name);
+        source_id="";
+        param = document.getElementById("category_list");
+        Category = param.options[param.selectedIndex].value;
+          var xmlhttp1 = new XMLHttpRequest();
+          xmlhttp1.onreadystatechange = function(){
+            if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+              console.log("this was returned");
+              console.log(xmlhttp1.responseText);
+              source = JSON.parse(xmlhttp1.responseText);
+              console.log("In getNews()");
+              for(i=0;i<source.length;i++){
+                stemp = source[i];
+                console.log(stemp);
+                console.log(stemp.name);
+                if(stemp.name==source_name){
+                  source_id = stemp.id;
+                  break;
+                }
+              }
+              console.log(source_id);
+              getInfo(source_id);
+            }
+            else{
+              console.log("file not found");
+            }
+          }
+          xmlhttp1.open("GET","/sources?category="+Category , true);
+          xmlhttp1.send();
+
+      }
+
+      function getInfo(source_id){
+        var html="";
+        var html1="";
+        console.log(form1.keyword.value);
+        var keyword = form1.keyword.value;
+        console.log(form1.from_date.value);
+        var from_date = form1.from_date.value;
+        console.log(form1.to_date.value);
+        var to_date = form1.to_date.value;
+        var xmlhttp2 = new XMLHttpRequest();
+        xmlhttp2.onreadystatechange = function(){
+          if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
+            console.log("this is the custom set of news");
+            console.log(xmlhttp2.responseText);
+            var response = xmlhttp2.responseText;
+
+            news_article = JSON.parse(xmlhttp2.responseText);
+            console.log(news_article);
+
+            if(news_article.includes("parameterInvalid")){
+              alert(news_article.substring(60,264));
+              return false;
+            }
+            if(news_article.length==0){
+              var no_result="<p>No Results</p>"
+              document.getElementById("search_card_holder").innerHTML = no_result;
+              document.getElementById("show").style.display="none";
+            }
+            else{
+              for(i=0;i<news_article.length;i++){
+                console.log(i);
+                if(i==5){
+                  displayShow();
+                  break;
+                }
+                article = news_article[i];
+                var MyDate = new Date(article.Date);
+                var MyDateString = ((MyDate.getMonth()+1) < 10 ? '0' + (MyDate.getMonth()+1) : (MyDate.getMonth()+1)) + '/' + (MyDate.getDate() < 10 ? '0' + MyDate.getDate() : MyDate.getDate()) + '/' + MyDate.getFullYear();
+                html+="<div class='search_card'>";
+                html+="<div class='close'>&times;</div>";
+                html+="<div class='search_card_image'><image class='on_card' src='"+article.Image+"'></div>";
+                html+="<div class='search_card_content'><h6 class='search_card_title' style='margin-left:5px'><b>"+article.Title+"</b></h6>";
+                console.log(typeof(article.Description));
+                console.log(article.Description);
+                var toDisplay  = checkWords(article.Description);
+                console.log(toDisplay);
+                html+="<div class='search_card_desc'><font size='1.5px'>"+toDisplay+"</font></div>";
+                html+="</div></div>";
+                html+="<div class='expanded_card'><div class='close' style='cursor:pointer'>&times;</div><div class='search_card_image'><img src='"+article.Image+"'class='on_card'></div>";
+                html+="<div class='search_card_content'><h6 style='margin-top:15px'><b>"+article.Title+"</b></h6>";
+                html+="<div class='search_card_dec' style='line-height:1.6'><font size='1px>'><b>Author: </b>"+article.Author+"<br><b>Source: </b>"+article.Source+"<br><b>Date: </b>"+MyDateString;
+                html+="<br>"+article.Description+"<br><a href='"+article.URL+"' target='_blank'>See Original Post</a></font>";
+                html+="</div></div></div>";
+              }
+
+              for(i=5;i<news_article.length;i++){
+                if(i==15){
+                  displayLess();
+                  break;
+                }
+                article = news_article[i];
+                var MyDate = new Date(article.Date);
+                var MyDateString = ((MyDate.getMonth()+1) < 10 ? '0' + (MyDate.getMonth()+1) : (MyDate.getMonth()+1)) + '/' + (MyDate.getDate() < 10 ? '0' + MyDate.getDate() : MyDate.getDate()) + '/' + MyDate.getFullYear();
+                html1+="<div class='search_card'>";
+                html1+="<div class='close'>&times;</div>";
+                html1+="<div class='search_card_image'><image class='on_card' src='"+article.Image+"'></div>";
+                html1+="<div class='search_card_content'><h6 class='search_card_title' style='margin-left:5px'><b>"+article.Title+"</b></h6>";
+                console.log(typeof(article.Description));
+                console.log(article.Description);
+                var toDisplay  = checkWords(article.Description);
+                console.log(toDisplay);
+                html1+="<div class='search_card_desc'><font size='1.5px'>"+toDisplay+"</font></div>";
+                html1+="</div></div>";
+                html1+="<div class='expanded_card'><div class='close' style='cursor:pointer'>&times;</div><div class='search_card_image'><img src='"+article.Image+"'class='on_card'></div>";
+                html1+="<div class='search_card_content'><h6 style='margin-top:15px'><b>"+article.Title+"</b></h6>";
+                html1+="<div class='search_card_dec' style='line-height:1.6'><font size='1px>'><b>Author: </b>"+article.Author+"<br><b>Source: </b>"+article.Source+"<br><b>Date: </b>"+MyDateString;
+                html1+="<br>"+article.Description+"<br><a href='"+article.URL+"' target='_blank'>See Original Post</a></font>";
+                html1+="</div></div></div>";
+              }
+
+
+              document.getElementById("search_card_holder").innerHTML = html;
+              document.getElementById("hidden_card_holder").innerHTML = html1;
+
+
+
+              expand();
+            }
+
+
+
+
+
+            }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp2.open("GET","/everything?q="+keyword+"&from="+from_date+"&to="+to_date+"&sources="+source_id , true);
+        xmlhttp2.send();
+      }
+      function validateForm(){
+        document.getElementById("show").style.display="none";
+        document.getElementById("showless").style.display="none";
+        // document.getElementById("search_card_holder").style.display="none";
+        document.getElementById("hidden_card_holder").style.display="none";
+        var from_date = new Date(document.getElementById("from").value);
+        var to_date = new Date(document.getElementById("to").value);
+        if(from_date.getTime()>=to_date.getTime()){
+          alert("Incorrect time");
+        }
+        else{
+          var p = document.getElementById("category_list");
+          var s = document.getElementById("selection_menu");
+          var cat = p.options[p.selectedIndex].value;
+          var soc = s.options[s.selectedIndex].value;
+          console.log("category in validateForm()"+cat);
+          if(cat=="all" || soc=="all"){
+            console.log("calling getFromSource")
+            getFromSource();
+          }
+
+          else{
+            console.log("calling getNews")
+            getNews();
+          }
+
+
+        }
+      }
+      function getFromSource(){
+        var html="";
+        var html1="";
+        console.log(form1.keyword.value);
+        var keyword = form1.keyword.value;
+        console.log(form1.from_date.value);
+        var from_date = form1.from_date.value;
+        console.log(form1.to_date.value);
+        var to_date = form1.to_date.value;
+        var xmlhttp2 = new XMLHttpRequest();
+        xmlhttp2.onreadystatechange = function(){
+          if(xmlhttp2.readyState == 4 && xmlhttp2.status == 200){
+            console.log("this is the custom set of news");
+            console.log(xmlhttp2.responseText);
+            var response = xmlhttp2.responseText;
+            console.log(xmlhttp2.responseText);
+            news_article = JSON.parse(xmlhttp2.responseText);
+            console.log(news_article);
+            if(news_article.includes("parameterInvalid")){
+              alert(news_article.substring(60,264));
+              return false;
+            }
+
+            if(news_article.length==0){
+              var no_result="<p>No Results</p>"
+              document.getElementById("search_card_holder").innerHTML = no_result;
+              document.getElementById("show").style.display="none";
+            }
+            else{
+              for(i=0;i<news_article.length;i++){
+                if(i==5){
+                  displayShow();
+                  break;
+                }
+                article = news_article[i];
+                var MyDate = new Date(article.Date);
+                var MyDateString = ((MyDate.getMonth()+1) < 10 ? '0' + (MyDate.getMonth()+1) : (MyDate.getMonth()+1)) + '/' + (MyDate.getDate() < 10 ? '0' + MyDate.getDate() : MyDate.getDate()) + '/' + MyDate.getFullYear();
+                html+="<div class='search_card'>";
+                html+="<div class='close'>&times;</div>";
+                html+="<div class='search_card_image'><image class='on_card' src='"+article.Image+"'></div>";
+                html+="<div class='search_card_content'><h6 class='search_card_title' style='margin-left:5px'><b>"+article.Title+"</b></h6>";
+                console.log(typeof(article.Description));
+                console.log(article.Description);
+                var toDisplay  = checkWords(article.Description);
+                console.log(toDisplay);
+                html+="<div class='search_card_desc'><font size='1.5px'>"+toDisplay+"</font></div>";
+                html+="</div></div>";
+                html+="<div class='expanded_card'><div class='close' style='cursor:pointer'>&times;</div><div class='search_card_image'><img src='"+article.Image+"'class='on_card'></div>";
+                html+="<div class='search_card_content'><h6 style='margin-top:15px'><b>"+article.Title+"</b></h6>";
+                html+="<div class='search_card_dec' style='line-height:1.6'><font size='1px>'><b>Author: </b>"+article.Author+"<br><b>Source: </b>"+article.Source+"<br><b>Date: </b>"+MyDateString;
+                html+="<br>"+article.Description+"<br><a href='"+article.URL+"' target='_blank'>See Original Post</a></font>";
+                html+="</div></div></div>";
+
+              }
+              for(i=5;i<news_article.length;i++){
+                if(i==15){
+                  displayLess();
+                  break;
+                }
+                article = news_article[i];
+                var MyDate = new Date(article.Date);
+                var MyDateString = ((MyDate.getMonth()+1) < 10 ? '0' + (MyDate.getMonth()+1) : (MyDate.getMonth()+1)) + '/' + (MyDate.getDate() < 10 ? '0' + MyDate.getDate() : MyDate.getDate()) + '/' + MyDate.getFullYear();
+                html1+="<div class='search_card'>";
+                html1+="<div class='close'>&times;</div>";
+                html1+="<div class='search_card_image'><image class='on_card' src='"+article.Image+"'></div>";
+                html1+="<div class='search_card_content'><h6 class='search_card_title' style='margin-left:5px'><b>"+article.Title+"</b></h6>";
+                console.log(typeof(article.Description));
+                console.log(article.Description);
+                var toDisplay  = checkWords(article.Description);
+                console.log(toDisplay);
+                html1+="<div class='search_card_desc'><font size='1.5px'>"+toDisplay+"</font></div>";
+                html1+="</div></div>";
+                html1+="<div class='expanded_card'><div class='close' style='cursor:pointer'>&times;</div><div class='search_card_image'><img src='"+article.Image+"'class='on_card'></div>";
+                html1+="<div class='search_card_content'><h6 style='margin-top:15px'><b>"+article.Title+"</b></h6>";
+                html1+="<div class='search_card_dec' style='line-height:1.6'><font size='1px>'><b>Author: </b>"+article.Author+"<br><b>Source: </b>"+article.Source+"<br><b>Date: </b>"+MyDateString;
+                html1+="<br>"+article.Description+"<br><a href='"+article.URL+"' target='_blank'>See Original Post</a></font>";
+                html1+="</div></div></div>";
+              }
+              document.getElementById("search_card_holder").innerHTML = html;
+              document.getElementById("hidden_card_holder").innerHTML = html1;
+              expand();
+            }
+          }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp2.open("GET","/fromAllSources?q="+keyword+"&from="+from_date+"&to="+to_date, true);
+        xmlhttp2.send();
+      }
+      function expand(){
+        var divs = document.getElementsByClassName("search_card");
+        document.querySelectorAll('.search_card').forEach(item => {
+          item.addEventListener('click', event => {
+            console.log("new code");
+            item.style.display="none";
+            item.nextSibling.style.display = "block";
+            var x = item.nextSibling;
+            var y = x.firstChild;
+            console.log(x);
+            console.log(y);
+            y.addEventListener('click',event => {
+              console.log("triggered");
+              item.style.display="block";
+              item.nextSibling.style.display = "none";
+            })
+          })
+        });
+
+      }
+      function showMore(){
+        document.getElementById("show").style.display="none";
+        document.getElementById("hidden_card_holder").style.display="block";
+        document.getElementById("showless").style.display="block";
+      }
+      function showLess(){
+        document.getElementById("show").style.display="block";
+        document.getElementById("hidden_card_holder").style.display="none";
+        document.getElementById("showless").style.display="none";
+      }
+      function clearSearchResults(){
+        document.getElementById('keyword').value="";
+        document.getElementById('category_list').value="all";
+        document.getElementById('selection_menu').value="all";
+        var d2 = document.getElementById('from');
+        var d1 = document.getElementById('to');
+        var date = new Date();
+        // Set the date
+        d1.value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, 0) +
+            '-' + date.getDate().toString().padStart(2, 0);
+
+        d2.value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, 0) +
+                '-' + (date.getDate() - 7).toString().padStart(2, 0);
+        document.getElementById("search_card_holder").innerHTML="";
+        document.getElementById("hidden_card_holder").innerHTML="";
+        document.getElementById("showless").style.display="none";
+        document.getElementById("show").style.display="none";
+      }
+      function wordCloud(){
+        console.log("get word cloud called");
+        var xmlhttp1 = new XMLHttpRequest();
+        xmlhttp1.onreadystatechange = function(){
+          if(xmlhttp1.readyState == 4 && xmlhttp1.status == 200){
+            console.log("this is for word cloud");
+            console.log(xmlhttp1.responseText);
+            var words = JSON.parse(xmlhttp1.responseText);
+            console.log(words);
+            var myWords = [{word: words[0], size: "10"}, {word: words[1], size: "10"}, {word: words[2], size: "10"}, {word: words[3], size: "15"}, {word: words[4], size: "10"},
+            {word: words[5], size: "15"},
+            {word: words[6], size: "8"}, {word: words[7], size: "10"}, {word: words[8], size: "10"}, {word: words[9], size: "15"}, {word: words[10], size: "8"}, {word: words[11], size: "20"},
+            {word: words[12], size: "8"}, {word: words[13], size: "10"}, {word: words[14], size: "20"}, {word: words[15], size: "10"}, {word: words[16], size: "10"}, {word: words[17], size: "15"},
+            {word: words[18], size: "8"}, {word: words[19], size: "10"}, {word: words[20], size: "10"}, {word: words[21], size: "10"}, {word: words[22], size: "20"}, {word: words[23], size: "25"},
+            {word: words[24], size: "10"}, {word: words[25], size: "10"}, {word: words[26], size: "5"}, {word: words[27], size: "10"}, {word: words[28], size: "5"}, {word: words[29], size: "8"}]
+
+            // set the dimensions and margins of the graph
+            var margin = {top: 2, right: 2, bottom: 2, left: 2},
+            width = 200 - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#wordCloud-container").append("svg")
+            .attr("width", width - margin.left - margin.right)
+            .attr("height", height - margin.top - margin.bottom)
+            .append("g")
+            // .attr("width", 200)
+            // .attr("height", 200)
+            .attr("transform",
+              "translate(" + -12 + "," + 4 + ")");
+
+
+
+              // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+              // Wordcloud features that are different from one word to the other must be here
+            var layout = d3.layout.cloud()
+            .size([width, height])
+            .words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
+            .padding(2)        //space between words
+            .rotate(function() { return ~~(Math.random() * 2) * 90; })
+            .fontSize(function(d) { return d.size; })      // font size of words
+            .on("end", draw);
+            layout.start();
+
+            // This function takes the output of 'layout' above and draw the words
+            // Wordcloud features that are THE SAME from one word to the other can be here
+            function draw(words) {
+              svg
+              .append("g")
+              // .attr("width", 200)
+              // .attr("height", 200)
+              .attr("transform", "translate(" + 102 + "," + 98 + ")")
+              .selectAll("text")
+              .data(words)
+              .enter().append("text")
+              // .style("margin",5)
+              .style("font-size", function(d) { return d.size; })
+              .style("fill", "black")
+              .attr("text-anchor", "middle")
+              .style("font-family", "Impact")
+              .attr("transform", function(d) {
+              return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+              })
+            .text(function(d) { return d.text; });
+            }
+          }
+          else{
+            console.log("file not found");
+          }
+        }
+        xmlhttp1.open("GET","/getWordCloud", true);
+        xmlhttp1.send();
+      }
+      function checkWords(string){
+        console.log("called checking words now");
+        console.log(string);
+        string = string.replace(/(^\s*)|(\s*$)/gi,"");
+        string = string.replace(/[ ]{2,}/gi," ");
+        string = string.replace(/\n /,"\n");
+
+        var words = string.split(' ');
+        console.log("array of words"+words);
+        console.log(words[0]);
+        console.log(string.split(' ').length);
+        if(string.split(' ').length > 12){
+          tempWords = words.slice(0,11);
+          var toDisplay = tempWords.join(' ');
+          return toDisplay+"...";
+        }
+        else{
+          return string;
+        }
+
+      }
+      function defaultDate(){
+        var d2 = document.getElementById('from');
+        var d1 = document.getElementById('to');
+        var date = new Date();
+        // Set the date
+        d1.value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, 0) +
+            '-' + date.getDate().toString().padStart(2, 0);
+
+        d2.value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, 0) +
+                '-' + (date.getDate() - 7).toString().padStart(2, 0);
+
+      }
+      function displayShow(){
+        document.getElementById("show").style.display="block";
+      }
+      function displayLess(){
+        if(document.getElementById("show").style.display=="none"){
+          document.getElementById("showless").style.display="block";
+        }
+
+      }
+</script>
+</head>
+<body>
+<div class="buttons">
+  <button class="google_news_button" onClick="displayNews();button_coloring();">Google News</button><br>
+  <button class="search_button" onClick="displayForm();button_coloring();">Search</button>
+</div>
+<div id="mynews" style="display:block;">
+  <div id="slideshow-container" style="overflow:hidden;"></div>
+  <div id="wordCloud-container" style="float:right;"></div>
+<p style="margin-top:50px;margin-bottom:20px;"><font size='6px'><B>CNN</B></font></p>
+  <hr class="line">
+  <div id="card-holdercnn"></div>
+<p style="margin-top:20px;margin-bottom:20px;"><font size='6px'><B>Fox News</B></font></p>
+<hr class="line">
+<div id="card-holderfox"></div>
+</div>
+<div id="myform" style="display:none;">
+  <form name="form1" onsubmit="return false">
+    <label class="required" for="keyword"><font size="2px">Keywords</font></label><input class="form_input" type="text" name="keyword" id="keyword" required>
+    <label class="required"><font size="2px">From</font></label><input id="from" class="form_input" type="date" name="from_date" required>
+    <label class="required"><font size="2px">To</font></label><input id="to" class="form_input" type="date" name="to_date" required><br>
+    <label><font size="2px">Category</font></label><Select id="category_list" class="form_input" size=1 onchange="addOptions()">
+      <option selected="selected">all</option>
+      <option>business</option>
+      <option>entertainment</option>
+      <option>general</option>
+      <option>health</option>
+      <option>science</option>
+      <option>sports</option>
+      <option>technology</option></select>
+    <label for="selection_menu"><font size="2px">Source</font></label><select id="selection_menu" class="form_input"><option selected='selected'>all</option></select><br>
+      <input id="bt1" type="submit" value="Search" onclick="validateForm();" style="background-color:#f2f2f2; border:none; padding:5px;margin-left:10px;margin-right:10px;width:15%;transition:0.3s" onmouseover="this.style.backgroundColor='#32CD32';this.style.color='white';transition:'0.3s'" onmouseout="this.style.backgroundColor='#f2f2f2';this.style.color='black'">
+      <input id="bt2" type="button" value="Clear" onclick="clearSearchResults();"style="background-color:#f2f2f2; border:none; padding:5px;margin-left:10px;margin-right:10px;width:15%;transition:0.3" onmouseover="this.style.backgroundColor='#32CD32';this.style.color='white';transition:'0.3s'" onmouseout="this.style.backgroundColor='#f2f2f2';this.style.color='black'">
+    </form>
+    <div id="search_card_holder"></div>
+    <button id="show" style="display:none;" onclick="showMore()">Show More</button>
+    <div id="hidden_card_holder"></div>
+    <button id="showless" style="display:none;" onclick="showLess()">Show Less</button>
+</body>
+</html>

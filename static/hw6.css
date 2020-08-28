@@ -1,0 +1,290 @@
+.buttons{
+  margin-left: 350px;
+  margin-top: 30px;
+  height:60px;
+  width:100px;
+  position: static;
+}
+.google_news_button{
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-top-color: LightGrey;
+  border-left-color: LightGrey;
+  border-right-color: LightGrey;
+  height:30px;
+  width:100px;
+  border-bottom: none;
+  background-color: #f2f2f2;
+  border-width: thin;
+  font-family: "Georgia";
+  transition:0.3s
+}
+.search_button{
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  height:30px;
+  width:100px;
+  border-top: none;
+  border-bottom-color:LightGrey;
+  border-left-color: LightGrey;
+  border-right-color: LightGrey;
+  background-color: #f2f2f2;
+  border-width:thin;
+  font-family: "Georgia";
+  transition:0.3s
+}
+#mynews{
+  text-align: center;
+  margin-left: 500px;
+  margin-right: 345px;
+  margin-top:-60px;
+}
+#myform{
+  text-align: center;
+  background-color: #f2f2f2;
+  margin-left: 500px;
+  margin-right: 345px;
+  margin-top:-60px;
+  height:100px;
+  padding:25px;
+  font-family: "Georgia";
+}
+#show{
+  background-color:#f2f2f2;
+  margin-left: auto;
+  margin-right: auto;
+  height:30px;
+  width:100px;
+  border:none;
+}
+#show:hover{
+  background-color: #32CD32;
+  color:white;
+}
+#showless{
+  margin-left: auto;
+  margin-right: auto;
+  height:30px;
+  width:100px;
+  border:none;
+  margin-bottom:20px;
+  background-color:#f2f2f2;
+}
+#showless:hover{
+  background-color: #32CD32;
+  color:white;
+}
+.form_input{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 20px;
+  width:20%;
+}
+.required:after{
+    content:" *";
+    color: red;
+  }
+.line{
+  border-top: 1px dotted black;
+}
+.card {
+  transition: 0.3s;
+  width: 23.5%;
+  height:100%;
+  border-radius: 4px;
+  float: left;
+  margin-left: 3px;
+  margin-right: 3px;
+  border-style: solid;
+  border-width: thin;
+  border-color: Grey;
+  background-color: #f2f2f2;
+}
+.google_news_button:hover{
+  background-color: #32CD32 !important;
+  color:white !important;
+}
+.search_button:hover{
+  background-color: #32CD32 !important;
+  color:white !important;
+}
+
+.slideImage{
+  width: 350px;
+  height: 200px;
+  object-fit: conver;
+  overflow: hidden;
+}
+.on_card{
+  width:65px;
+  height:65px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+div.close{
+  float:right;
+}
+.search_card .close{
+  opacity:0;
+}
+.expanded_card .close{
+  opacity:1;
+  margin-right:-10px;
+  margin-top:-15px;
+}
+.expanded_card .close:hover{
+  color: purple !important;
+}
+.expanded_card .close:active{
+  color: red !important;
+}
+
+
+#search_card_holder{
+  margin-top: 60px;
+  width:100%;
+}
+#hidden_card_holder{
+  width:100%;
+  display:none;
+}
+.search_card{
+  width:95%;
+  background-color: #f2f2f2;
+  height:auto;
+  margin-top:0px;
+  margin-bottom:10px;
+  position:relative;
+  padding:15px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: thin;
+  border-color: LightGrey;
+  cursor: pointer;
+}
+.search_card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.search_card_image{
+  width:65px;
+  height:65px;
+  background-color: #f2f2f2;
+  object-fit: cover;
+}
+.search_card_content{
+  width:85%;
+  height:auto;
+  float:right;
+  margin-top: -82px;
+  text-align: left;
+  font-family: "Georgia";
+}
+h6.search_card_title{
+  margin-top:15px;
+  margin-bottom:0px;
+  margin-left:5px;
+}
+.search_card_desc{
+  margin-left:5px;
+  margin-top:6px;
+}
+.expanded_card{
+  width:95%;
+  background-color: #f2f2f2;
+  margin-top:0px;
+  margin-bottom:10px;
+  padding:15px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: thin;
+  border-color: LightGrey;
+  display:none;
+  overflow: auto;
+}
+.expanded_card .search_card_image{
+  width:65px;
+  height:65px;
+  background-color: #32CD32;
+  object-fit: cover;
+}
+.expanded_card .search_card_content{
+  width:85%;
+  overflow: auto;
+  float:right;
+  margin-top: -82px;
+  text-align: left;
+  font-family: "Georgia";
+}
+.expanded_card .search_card_content h6{
+  margin-bottom:0px;
+  margin-left:5px;
+}
+.expanded_card .search_card_dec{
+  margin-left:5px;
+  margin-top:10px;
+}
+.expanded_card:hover{
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+
+
+
+
+
+.card-image{
+  height:30%;
+  border-radius: 5px 5px 5px 5px;
+  margin-bottom: 0px;
+  border-color: LightGrey;
+  object-fit: cover;
+}
+.container {
+  margin-top:0px;
+  height: 65%;
+}
+
+h6.title {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding-left:2px;
+  padding-right:2px;
+  font-family: "Georgia";
+}
+p.desc{
+  height:inherit;
+  padding-left:2px;
+  padding-right:2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#card-holdercnn{
+  height: 350px;
+}
+#card-holderfox{
+  height: 350px;
+}
+#slideshow-container {
+  max-width: 350px;
+  position: relative;
+  height: 200px;
+}
+#wordCloud-container{
+  background-color:#f2f2f2;
+  height:200px;
+  float:right;
+  margin-top:-200px;
+  width:200px;
+}
+.text {
+  position: absolute;
+  bottom: 0px;
+  padding:4px;
+  background: rgb(0,0,0,0.4);
+  font-family: "Georgia";
+  color:white;
+}
+#bt1,#bt2,button:focus{
+   outline:none;
+  }
